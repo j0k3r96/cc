@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class jsonData {
+public class JsonData {
 
     private final String START = "Erde";
     private final String DEST = "b3-r7-r4nd7";
@@ -17,9 +17,9 @@ public class jsonData {
     private Map<Integer, ArrayList<Route>> possRoutes = new HashMap<Integer, ArrayList<Route>>();
 
 
-    public jsonData() {
+    public JsonData() {
         String resourceName = "/generatedGraph.json";
-        InputStream is = jsonData.class.getResourceAsStream(resourceName);
+        InputStream is = JsonData.class.getResourceAsStream(resourceName);
         JSONTokener tokener = new JSONTokener(is);
 
         JSONObject data = new JSONObject(tokener);
@@ -42,6 +42,12 @@ public class jsonData {
             Integer src = (Integer)edges.query(ptrSrc);
             ArrayList<Route> al = possRoutes.containsKey(src) ? possRoutes.get(src) : new ArrayList<Route>();
             al.add(new Route(src, (Integer)edges.query(ptrTrgt), (Double) edges.query(ptrCost)));
+            possRoutes.put(src, al);
+
+            //other direction
+            src = (Integer)edges.query(ptrTrgt);
+            al = possRoutes.containsKey(src) ? possRoutes.get(src) : new ArrayList<Route>();
+            al.add(new Route(src, (Integer)edges.query(ptrSrc), (Double) edges.query(ptrCost)));
             possRoutes.put(src, al);
         }
     }
