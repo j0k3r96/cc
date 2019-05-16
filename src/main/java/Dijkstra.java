@@ -1,32 +1,51 @@
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
 
+/**
+ * Klasse zur Berechnung der kuerzesten Route zwischen zwei Knoten,
+ * angelehnt an den Algorithmus von Dijkstra
+ * @author Leo und Lovis
+ */
 public class Dijkstra {
 
-    Map<Integer, ArrayList<Route>> routes;
-    TreeNode root;
-    int dest;
-    ArrayList<TreeNode> leaves = new ArrayList<TreeNode>();
+    JsonData data;
+
+    Node root;
+    ArrayList<Node> leaves = new ArrayList<Node>();
     HashSet<Integer> visited = new HashSet<Integer>();
 
-    public Dijkstra(Map<Integer, ArrayList<Route>> routes, int start, int dest) {
-        this.routes = routes;
-        this.dest = dest;
-        this.root = new TreeNode(start, 0, null);
+    /**
+     * Konstruktor zur Uebergabe der wichtigsten Parameter
+     *
+     * @param data die verarbeite JSON-Informationen
+     */
+    public Dijkstra(JsonData data) {
+        this.data = data;
+        this.root = new Node(data.getIdxStart(), 0, null);
     }
 
-    public TreeNode findBestRoute() {
+    /**
+     * Finds
+     *
+     * @return
+     */
+    public Node findBestRoute() {
         return step(root);
     }
 
-    private TreeNode step(TreeNode node) {
-        while (node.getId() != dest) {
-            ArrayList<TreeNode> nodes = new ArrayList<TreeNode>();
-            if (routes.get(node.getId()) != null) {
-                for (Route r : routes.get(node.getId())) {
+    /**
+     * TODO
+     *
+     * @param node
+     * @return
+     */
+    private Node step(Node node) {
+        while (node.getId() != data.getIdxDest()) {
+            ArrayList<Node> nodes = new ArrayList<Node>();
+            if (data.getPossRoutes().get(node.getId()) != null) {
+                for (Route r : data.getPossRoutes().get(node.getId())) {
                     if(!visited.contains(r.getTarget())) {
-                        TreeNode tr = new TreeNode(r.getTarget(), node.getDistance() + r.getCost(), node);
+                        Node tr = new Node(r.getTarget(), node.getDistance() + r.getCost(), node);
                         nodes.add(tr);
                         leaves.add(tr);
                     }
@@ -39,9 +58,14 @@ public class Dijkstra {
         return node;
     }
 
-    private TreeNode findShortest() {
-        TreeNode min = null;
-        for (TreeNode tn : leaves) {
+    /**
+     * TODO
+     *
+     * @return
+     */
+    private Node findShortest() {
+        Node min = null;
+        for (Node tn : leaves) {
             if (min == null || tn.getDistance() < min.getDistance()) {
                 min = tn;
             }
@@ -49,11 +73,18 @@ public class Dijkstra {
         return min;
     }
 
-    public String printRoute(TreeNode tn, String s) {
+    /**
+     * TODO
+     *
+     * @param tn
+     * @param s
+     * @return
+     */
+    public String printRoute(Node tn, String s) {
         if (tn.getId() != root.getId()) {
-            s = " ---" + tn.getDistance() + "---> " +tn.toString() + s;
+            s = " ---" + tn.getDistance() + "---> " + data.getNodeList().get(tn.getId()) + s;
             return printRoute(tn.getPrev(), s);
         }
-        return root.getId() + s;
+        return data.getNodeList().get(root.getId()) + s;
     }
 }

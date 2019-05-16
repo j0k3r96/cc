@@ -1,23 +1,27 @@
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Klasse zur verarbeitung von JSON Dateien
+ * @author Leo und Lovis
+ */
 public class JsonData {
 
-    private final String START = "Erde";
-    private final String DEST = "b3-r7-r4nd7";
 
     private int idxDest = - 1;
     private int idxStart = -1;
     private Map<Integer, ArrayList<Route>> possRoutes = new HashMap<Integer, ArrayList<Route>>();
+    private ArrayList<String> nodeList = new ArrayList<String>();
 
-
-    public JsonData() {
+    /**
+     * Konstruktor zum Erstellen eines JsonData-Objekts
+     */
+    public JsonData(String start, String dest) {
         String resourceName = "/generatedGraph.json";
         InputStream is = JsonData.class.getResourceAsStream(resourceName);
         JSONTokener tokener = new JSONTokener(is);
@@ -28,11 +32,12 @@ public class JsonData {
         for (int i = 0; i < nodes.length(); i++) {
             String pointer = "/"+i+"/label";
             if (idxStart == -1) {
-                idxStart = ((String) nodes.query(pointer)).equals(START) ? i : -1;
+                idxStart = ((String) nodes.query(pointer)).equals(start) ? i : -1;
             }
             if (idxDest == -1) {
-                idxDest = ((String) nodes.query(pointer)).equals(DEST) ? i : -1;
+                idxDest = ((String) nodes.query(pointer)).equals(dest) ? i : -1;
             }
+            nodeList.add((String) nodes.query(pointer));
         }
 
         for (int i = 0; i < edges.length(); i++) {
@@ -56,24 +61,16 @@ public class JsonData {
         return idxDest;
     }
 
-    public void setIdxDest(int idxDest) {
-        this.idxDest = idxDest;
-    }
-
     public int getIdxStart() {
         return idxStart;
-    }
-
-    public void setIdxStart(int idxStart) {
-        this.idxStart = idxStart;
     }
 
     public Map<Integer, ArrayList<Route>> getPossRoutes() {
         return possRoutes;
     }
 
-    public void setPossRoutes(Map<Integer, ArrayList<Route>> possRoutes) {
-        this.possRoutes = possRoutes;
+    public ArrayList<String> getNodeList() {
+        return nodeList;
     }
 }
 
