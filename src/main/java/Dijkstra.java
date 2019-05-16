@@ -25,19 +25,21 @@ public class Dijkstra {
     }
 
     /**
-     * Finds
+     * Fuehrt die Routenberechnung aus und gibt die Ziel-Node zurueck.
+     * Anhand der Node kann man den Pfad zurueck verfolgen.
      *
-     * @return
+     * @return ZielNode
      */
     public Node findBestRoute() {
         return step(root);
     }
 
     /**
-     * TODO
+     * Fuehrt den Dijkstra-Algorithmus aus
      *
-     * @param node
-     * @return
+     * @param node der Wurzelknoten
+     * @return den Zielknoten, mit Angabe der Laenge des kuerzesten Weges und der Knoten,
+     *          die auf dem Weg durchlaufen wurden.
      */
     private Node step(Node node) {
         while (node.getId() != data.getIdxDest()) {
@@ -59,9 +61,9 @@ public class Dijkstra {
     }
 
     /**
-     * TODO
+     * Findet von allen offenen Routenpfaden den, der dem Startpunkt am naechsten ist
      *
-     * @return
+     * @return den Knoten
      */
     private Node findShortest() {
         Node min = null;
@@ -74,11 +76,11 @@ public class Dijkstra {
     }
 
     /**
-     * TODO
+     * Gibt die im Knoten uebergebene Route formatiert aus
      *
-     * @param tn
-     * @param s
-     * @return
+     * @param tn der uebergebene Knoten
+     * @param s String zum rekursiven Aufruf
+     * @return Route
      */
     public String printRoute(Node tn, String s) {
         if (tn.getId() != root.getId()) {
