@@ -19,10 +19,6 @@ public class Route {
         this.cost = cost;
     }
 
-    public int getSource() {
-        return source;
-    }
-
     public int getTarget() {
         return target;
     }

@@ -43,12 +43,10 @@ public class Dijkstra {
      */
     private Node step(Node node) {
         while (node != null && node.getId() != data.getIdxDest()) {
-            ArrayList<Node> nodes = new ArrayList<Node>();
             if (data.getPossRoutes().get(node.getId()) != null) {
                 for (Route r : data.getPossRoutes().get(node.getId())) {
                     if(!visited.contains(r.getTarget())) {
                         Node tr = new Node(r.getTarget(), node.getDistance() + r.getCost(), node);
-                        nodes.add(tr);
                         leaves.add(tr);
                     }
                 }
