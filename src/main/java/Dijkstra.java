@@ -42,7 +42,7 @@ public class Dijkstra {
      *          die auf dem Weg durchlaufen wurden.
      */
     private Node step(Node node) {
-        while (node.getId() != data.getIdxDest()) {
+        while (node != null && node.getId() != data.getIdxDest()) {
             ArrayList<Node> nodes = new ArrayList<Node>();
             if (data.getPossRoutes().get(node.getId()) != null) {
                 for (Route r : data.getPossRoutes().get(node.getId())) {
@@ -67,9 +67,11 @@ public class Dijkstra {
      */
     private Node findShortest() {
         Node min = null;
-        for (Node tn : leaves) {
-            if (min == null || tn.getDistance() < min.getDistance()) {
-                min = tn;
+        if (leaves.size() > 0) {
+            for (Node tn : leaves) {
+                if (min == null || tn.getDistance() < min.getDistance()) {
+                    min = tn;
+                }
             }
         }
         return min;
@@ -83,10 +85,14 @@ public class Dijkstra {
      * @return Route
      */
     public String printRoute(Node tn, String s) {
-        if (tn.getId() != root.getId()) {
-            s = " ---" + tn.getDistance() + "---> " + data.getNodeList().get(tn.getId()) + s;
-            return printRoute(tn.getPrev(), s);
+        if (tn != null) {
+            if (tn.getId() != root.getId()) {
+                s = " ---" + tn.getDistance() + "---> " + data.getNodeList().get(tn.getId()) + s;
+                return printRoute(tn.getPrev(), s);
+            }
+            return data.getNodeList().get(root.getId()) + s;
+        } else {
+            return "Keine gueltige Route gefunden!";
         }
-        return data.getNodeList().get(root.getId()) + s;
     }
 }
